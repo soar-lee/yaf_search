@@ -5,8 +5,31 @@
 </head>
 <body>
     <form action="/search" method="get">
-        <input type="text" name="words">
-        <input type="submit">
+        <input type="text" name="words" style="width: 500px;height: 50px;font-size: 40px">
+        <input type="submit" style="font-size: 50px">
     </form>
+    <hr>
+    搜索到 <?php echo $total ?> 条信息，耗时 <?php echo $took ?> 毫秒。
+    <hr>
+    <div style="">
+        <?php foreach ($data as $val){ ?>
+        <div style="margin: 50px">
+            <dl>
+                <dt style="font-size: 14px;text-underline: black;font-weight: 400">
+                    <a href="javascript:void(0);"><?php echo $val['_source']['title'] ?></a>
+                </dt>
+                <dd style="font-size: 12px;margin: 10px"><?php echo $val['_source']['note'] ?></dd>
+                相关性得分：<?php echo $val['_score'] ?>
+            </dl>
+        </div>
+        <?php } ?>
+        <div>
+            <ul>
+                <?php for($i=0;$i<$total&&$i<100;$i+=10){ ?>
+                    <li style="float: left;height: 30px;width: 30px"><a href="/search?page=<?php echo $i/10+1 ?>&words=<?php echo $words ?>"><?php echo $i/10+1 ?></a></li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

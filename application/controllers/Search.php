@@ -1,16 +1,34 @@
 <?php
 /**
- * @name ErrorController
- * @desc 错误控制器, 在发生未捕获的异常时刻被调用
- * @see http://www.php.net/manual/en/yaf-dispatcher.catchexception.php
- * @author Administrator
+ * @name SearchController
+ * @desc 搜索控制器，使用Elasticsearch搜索文章
+ * @author 李腾
  */
-class ErrorController extends Yaf_Controller_Abstract {
+class SearchController extends Yaf_Controller_Abstract {
 
-	//从2.1开始, errorAction支持直接通过参数获取异常
-	public function errorAction($exception) {
-		//1. assign to view engine
-		$this->getView()->assign("exception", $exception);
-		//5. render by Yaf 
+	public function IndexAction() {
+        $page = I("page");
+        $words = I("words");
+        $model = new QuestionModel();
+        $res = $model->search($words,$page);
+        if($res != false){
+            $total = $res['hits']['total']; //总数
+            $took = $res['took'];           //耗时
+            $data = $res['hits']['hits'];   //数据
+        }
+
+        $this->getView()->assign("words",$words);
+        $this->getView()->assign("took",$took);
+        $this->getView()->assign("total",$total);
+        $this->getView()->assign("data",$data);
+        return true;
 	}
+
+    public function create_indexAction(){
+        $model = new QuestionModel();
+        $model->updateAllIndex();
+        echo "create index done";
+
+        return false;
+    }
 }

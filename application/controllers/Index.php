@@ -27,6 +27,14 @@ class IndexController extends Yaf_Controller_Abstract {
         return TRUE;
 	}
 
+	public function createallindexAction(){
+        $model = new QuestionModel();
+        $model->updateAllIndex();
+        echo "create index done";
+
+        return false;
+    }
+
 	public function insertAction(){
 
 		$text = "作者：陈小惜
@@ -72,7 +80,7 @@ _________________________
 猫司令：无业游民，现居纽约。";
 
 		$question = new QuestionModel();
-		for($i=0;$i<10000;$i++){
+		for($i=0;$i<1;$i++){
 			$data['title'] = $data['note'] = "";
 			for($j=0;$j<mt_rand(20,80);$j++){
 				$data['title'].= mb_substr($text,mt_rand(0, mb_strlen($text,"utf8") - 1),1,"utf8");
@@ -83,6 +91,7 @@ _________________________
 			$question->insertData($data);
 		}
 
+		echo "inserted 100 datas to zj_question";
 		return false;
 	}
 
